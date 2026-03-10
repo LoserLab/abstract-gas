@@ -1,0 +1,47 @@
+{
+  "name": "abstract-gas",
+  "version": "0.1.0",
+  "description": "Gas estimator for Abstract (ZKsync L2). Shows execution gas, pubdata costs, and L1 fees.",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "abstract-gas": "dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [
+    "abstract",
+    "zksync",
+    "gas",
+    "estimation",
+    "l2",
+    "ethereum",
+    "solidity"
+  ],
+  "author": "Heathen",
+  "license": "MIT",
+  "devDependencies": {
+    "playwright": "^1.58.2",
+    "tsup": "^8.4.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.1.0"
+  },
+  "dependencies": {
+    "commander": "^13.1.0"
+  }
+}

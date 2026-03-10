@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>abstract-gas social card</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+
+  .card {
+    width: 1200px;
+    height: 628px;
+    background: #00D661;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 80px 64px 80px;
+  }
+
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .top-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #0A0A0A 0%, #1A3A28 50%, #0A0A0A 100%);
+    z-index: 10;
+  }
+
+  .glow-top {
+    position: absolute;
+    top: -180px;
+    right: 20%;
+    width: 600px;
+    height: 400px;
+    background: radial-gradient(ellipse, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.04) 50%, transparent 70%);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .glow-corner {
+    position: absolute;
+    bottom: -80px;
+    right: -60px;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(0, 0, 0, 0.06) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* Faded gas estimation output background */
+  .code-bg {
+    position: absolute;
+    top: 32px;
+    right: 50px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.8;
+    white-space: pre;
+    pointer-events: none;
+    z-index: 2;
+    user-select: none;
+    color: rgba(0, 0, 0, 0.07);
+  }
+
+  .code-bg .c-dark { color: rgba(0, 0, 0, 0.12); }
+  .code-bg .c-dim { color: rgba(0, 0, 0, 0.05); }
+
+  .brand {
+    position: absolute;
+    top: 40px;
+    left: 80px;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .brand-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #0A0A0A;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .brand-line {
+    width: 32px;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  .brand-type {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: #0A0A0A;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  .badge {
+    position: absolute;
+    top: 36px;
+    right: 80px;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 16px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 100px;
+    background: rgba(0, 0, 0, 0.06);
+  }
+
+  .badge-dot {
+    width: 5px;
+    height: 5px;
+    background: #0A0A0A;
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .badge-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: #0A0A0A;
+    letter-spacing: 0.08em;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .code-hint {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.3);
+    margin-bottom: 4px;
+  }
+
+  .code-hint .val {
+    color: rgba(0, 0, 0, 0.5);
+  }
+
+  .title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 72px;
+    font-weight: 700;
+    color: #0A0A0A;
+    letter-spacing: -0.045em;
+    line-height: 1;
+  }
+
+  .title .dim {
+    color: rgba(0, 0, 0, 0.25);
+  }
+
+  .title .accent {
+    color: #FFFFFF;
+  }
+
+  .subtitle {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.45);
+    line-height: 1.5;
+  }
+
+  .bottom-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding-top: 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .pills {
+    display: flex;
+    gap: 8px;
+  }
+
+  .pill {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 100px;
+    letter-spacing: 0.02em;
+  }
+
+  .pill-dark {
+    background: rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    color: #0A0A0A;
+  }
+
+  .pill-white {
+    background: rgba(255, 255, 255, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #FFFFFF;
+  }
+
+  .bottom-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+  }
+
+  .built-in {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.25);
+    letter-spacing: 0.02em;
+  }
+
+  .repo-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.3);
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="grid"></div>
+  <div class="top-line"></div>
+  <div class="glow-top"></div>
+  <div class="glow-corner"></div>
+
+  <div class="code-bg"><span class="c-dim">$ abstract-gas --preset transfer</span>
+
+<span class="c-dark">  Abstract (ZKsync L2)</span>
+<span class="c-dim">  Gas limit              </span><span class="c-dark">156,842</span>
+<span class="c-dim">  Gas per pubdata        </span><span class="c-dark">50,000</span>
+<span class="c-dim">  Max fee per gas        </span><span class="c-dark">0.250 gwei</span>
+<span class="c-dim">  Estimated cost         </span><span class="c-dark">0.00003921 ETH</span>
+
+<span class="c-dark">  Ethereum L1</span>
+<span class="c-dim">  Gas estimate           </span><span class="c-dark">21,000</span>
+<span class="c-dim">  Gas price              </span><span class="c-dark">28.500 gwei</span>
+<span class="c-dim">  Estimated cost         </span><span class="c-dark">0.00059850 ETH</span>
+
+<span class="c-dark">  ↓ 93.4% cheaper on Abstract</span></div>
+
+  <div class="brand">
+    <span class="brand-name">heathen</span>
+    <div class="brand-line"></div>
+    <span class="brand-type">Open Source</span>
+  </div>
+
+  <div class="badge">
+    <div class="badge-dot"></div>
+    <span class="badge-text">GAS ESTIMATOR</span>
+  </div>
+
+  <div class="content">
+    <div class="code-hint">↓ <span class="val">93.4%</span> cheaper on Abstract</div>
+
+    <div>
+      <div class="title">abstract<span class="dim">-</span><span class="accent">gas</span></div>
+      <div class="subtitle">Gas estimator for Abstract. Shows execution gas, pubdata costs, and L1 fees.</div>
+    </div>
+
+    <div class="bottom-row">
+      <div class="pills">
+        <span class="pill pill-dark">6 Presets</span>
+        <span class="pill pill-dark">L1 vs L2</span>
+        <span class="pill pill-white">Pubdata Costs</span>
+        <span class="pill pill-white">CI-Ready</span>
+        <span class="pill pill-white">MIT License</span>
+      </div>
+      <div class="bottom-right">
+        <span class="built-in">Built in Mirra</span>
+        <span class="repo-link">github.com/LoserLab/abstract-gas</span>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
