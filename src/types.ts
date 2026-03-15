@@ -6,9 +6,6 @@ export interface ZksEstimateFeeResult {
   maxPriorityFeePerGas: string;
 }
 
-/** Raw response from eth_estimateGas */
-export type EthEstimateGasResult = string;
-
 /** Transaction call object for estimation */
 export interface TransactionCall {
   from?: string;

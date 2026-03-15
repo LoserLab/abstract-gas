@@ -37,7 +37,6 @@ async function rpcCall<T>(
   return json.result;
 }
 
-/** Call zks_estimateFee on Abstract/ZKsync */
 export async function zksEstimateFee(
   rpcUrl: string,
   tx: TransactionCall
@@ -45,7 +44,6 @@ export async function zksEstimateFee(
   return rpcCall<ZksEstimateFeeResult>(rpcUrl, "zks_estimateFee", [tx]);
 }
 
-/** Call eth_estimateGas */
 export async function ethEstimateGas(
   rpcUrl: string,
   tx: TransactionCall
@@ -53,12 +51,10 @@ export async function ethEstimateGas(
   return rpcCall<string>(rpcUrl, "eth_estimateGas", [tx]);
 }
 
-/** Call eth_gasPrice */
 export async function ethGasPrice(rpcUrl: string): Promise<string> {
   return rpcCall<string>(rpcUrl, "eth_gasPrice", []);
 }
 
-/** Call zks_getL1GasPrice */
 export async function zksGetL1GasPrice(rpcUrl: string): Promise<string> {
   return rpcCall<string>(rpcUrl, "zks_getL1GasPrice", []);
 }

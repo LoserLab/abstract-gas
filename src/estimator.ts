@@ -28,7 +28,6 @@ export function ethToUsd(ethStr: string, ethPrice: number): string {
   return `$${usd.toFixed(2)}`;
 }
 
-/** Format gwei */
 export function weiToGwei(wei: bigint): string {
   const gwei = Number(wei) / 1e9;
   if (gwei < 0.001) return "<0.001";

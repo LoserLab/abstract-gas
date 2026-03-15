@@ -1,9 +1,8 @@
 import { Command } from "commander";
 import { compareGas } from "./estimator.js";
-import { buildPresetTx, allPresets } from "./presets.js";
+import { buildPresetTx, allPresets, presetDescriptions } from "./presets.js";
 import { formatPresetTable, formatComparison, formatJson } from "./reporter.js";
-import { presetDescriptions } from "./presets.js";
-import type { PresetType, RpcConfig } from "./types.js";
+import type { GasComparison, PresetType, RpcConfig } from "./types.js";
 
 const ABSTRACT_MAINNET_RPC = "https://api.production.abs.xyz/rpc";
 const ABSTRACT_TESTNET_RPC = "https://api.testnet.abs.xyz/rpc";
@@ -56,9 +55,23 @@ program
         };
         const comparison = await compareGas(tx, config);
         if (opts.json) {
-          console.log(
-            formatJson([{ preset: "transfer" as PresetType, comparison }])
-          );
+          console.log(JSON.stringify({
+            type: "custom",
+            abstract: {
+              gasLimit: comparison.abstract.gasLimit.toString(),
+              gasPerPubdataLimit: comparison.abstract.gasPerPubdataLimit.toString(),
+              maxFeePerGas: comparison.abstract.maxFeePerGas.toString(),
+              estimatedCostEth: comparison.abstract.estimatedCostEth,
+              estimatedCostUsd: comparison.abstract.estimatedCostUsd,
+            },
+            ethereum: comparison.ethereum ? {
+              gasEstimate: comparison.ethereum.gasEstimate.toString(),
+              gasPrice: comparison.ethereum.gasPrice.toString(),
+              estimatedCostEth: comparison.ethereum.estimatedCostEth,
+              estimatedCostUsd: comparison.ethereum.estimatedCostUsd,
+            } : null,
+            savings: comparison.savings,
+          }, null, 2));
         } else {
           console.log(formatComparison(comparison, "Custom Transaction"));
         }
@@ -67,13 +80,13 @@ program
 
       // Single preset
       if (opts.preset) {
-        const preset = opts.preset as PresetType;
-        if (!allPresets.includes(preset)) {
+        if (!allPresets.includes(opts.preset as PresetType)) {
           console.error(
-            `Error: Unknown preset "${preset}". Available: ${allPresets.join(", ")}`
+            `Error: Unknown preset "${opts.preset}". Available: ${allPresets.join(", ")}`
           );
           process.exit(1);
         }
+        const preset = opts.preset as PresetType;
         const tx = buildPresetTx(preset);
         const comparison = await compareGas(tx, config);
         if (opts.json) {
@@ -87,12 +100,7 @@ program
       }
 
       // All presets
-      const results: Array<{
-        preset: PresetType;
-        comparison: ReturnType<typeof compareGas> extends Promise<infer T>
-          ? T
-          : never;
-      }> = [];
+      const results: Array<{ preset: PresetType; comparison: GasComparison }> = [];
 
       for (const preset of allPresets) {
         const tx = buildPresetTx(preset);

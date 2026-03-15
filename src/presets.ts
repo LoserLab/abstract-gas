@@ -9,12 +9,10 @@ const ERC20_TRANSFER = "0xa9059cbb";
 /** ERC-20 approve(address,uint256) selector */
 const ERC20_APPROVE = "0x095ea7b3";
 
-/** Pad address to 32 bytes */
 function padAddress(addr: string): string {
   return addr.replace("0x", "").padStart(64, "0");
 }
 
-/** Encode uint256 */
 function padUint256(val: string): string {
   return BigInt(val).toString(16).padStart(64, "0");
 }
